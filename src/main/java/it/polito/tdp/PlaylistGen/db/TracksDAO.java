@@ -10,7 +10,11 @@ import java.util.List;
 public class TracksDAO {
 	
 	public List<String> listAllGenre(){
-		String sql = "SELECT DISTINCT Tracks.`Top Genre` FROM Tracks";
+		String sql = "SELECT Tracks.`Top Genre`, COUNT(Tracks.`Top Genre`) "
+				+ "FROM Tracks "
+				+ "GROUP BY Tracks.`Top Genre` "
+				+ "HAVING COUNT(Tracks.`Top Genre`) >= 20 "
+				+ "ORDER BY Tracks.`Top Genre`";
 		List<String> result = new ArrayList<String>();
 		Connection conn = DBConnect.getConnection();
 
@@ -31,4 +35,5 @@ public class TracksDAO {
 			return null;
 		}
 	}
+	
 }
