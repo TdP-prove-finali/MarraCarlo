@@ -4,13 +4,13 @@ import java.util.Objects;
 
 public class Preference {
 	
-	private Integer energy;
-	private Integer danceability;
-	private Integer valence;
-	private Integer acousticness;
-	private Integer popularty;
+	private Double energy;
+	private Double danceability;
+	private Double valence;
+	private Double acousticness;
+	private Double popularty;
 	
-	public Preference(Integer energy, Integer danceability, Integer valence, Integer acousticness, Integer popularty) {
+	public Preference(Double energy, Double danceability, Double valence, Double acousticness, Double popularty) {
 		super();
 		this.energy = energy;
 		this.danceability = danceability;
@@ -19,23 +19,23 @@ public class Preference {
 		this.popularty = popularty;
 	}
 
-	public Integer getEnergy() {
+	public Double getEnergy() {
 		return energy;
 	}
 
-	public Integer getDanceability() {
+	public Double getDanceability() {
 		return danceability;
 	}
 
-	public Integer getValence() {
+	public Double getValence() {
 		return valence;
 	}
 
-	public Integer getAcousticness() {
+	public Double getAcousticness() {
 		return acousticness;
 	}
 
-	public Integer getPopularty() {
+	public Double getPopularty() {
 		return popularty;
 	}
 
@@ -63,8 +63,9 @@ public class Preference {
 		return "Preference [energy=" + energy + ", danceability=" + danceability + ", valence=" + valence
 				+ ", acousticness=" + acousticness + ", popularty=" + popularty + "]";
 	}
+
 	
 	
 	
-	
+
 }

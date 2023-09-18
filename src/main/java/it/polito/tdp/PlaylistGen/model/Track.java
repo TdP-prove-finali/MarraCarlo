@@ -7,7 +7,8 @@ public class Track {
 	private Integer trackId;
 	private String title;
 	private String artist;
-	private String topGenre;
+	private String genre;
+	private Integer length;
 	private Integer year;
 	private Integer energy;
 	private Integer danceability;
@@ -15,13 +16,14 @@ public class Track {
 	private Integer acousticness;
 	private Integer popularty;
 	
-	public Track(Integer trackId, String title, String artist, String topGenre, Integer year, Integer energy,
+	public Track(Integer trackId, String title, String artist, String genre, Integer length, Integer year, Integer energy,
 			Integer danceability, Integer valence, Integer acousticness, Integer popularty) {
 		super();
 		this.trackId = trackId;
 		this.title = title;
 		this.artist = artist;
-		this.topGenre = topGenre;
+		this.genre = genre;
+		this.length = length;
 		this.year = year;
 		this.energy = energy;
 		this.danceability = danceability;
@@ -43,7 +45,11 @@ public class Track {
 	}
 
 	public String getTopGenre() {
-		return topGenre;
+		return genre;
+	}
+	
+	public Integer getLenght() {
+		return length;
 	}
 
 	public Integer getYear() {
@@ -69,11 +75,11 @@ public class Track {
 	public Integer getPopularty() {
 		return popularty;
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(acousticness, artist, danceability, energy, popularty, title, topGenre, trackId, valence,
-				year);
+		return Objects.hash(acousticness, artist, danceability, energy, genre, length, popularty, title, trackId,
+				valence, year);
 	}
 
 	@Override
@@ -87,17 +93,20 @@ public class Track {
 		Track other = (Track) obj;
 		return Objects.equals(acousticness, other.acousticness) && Objects.equals(artist, other.artist)
 				&& Objects.equals(danceability, other.danceability) && Objects.equals(energy, other.energy)
+				&& Objects.equals(genre, other.genre) && Objects.equals(length, other.length)
 				&& Objects.equals(popularty, other.popularty) && Objects.equals(title, other.title)
-				&& Objects.equals(topGenre, other.topGenre) && Objects.equals(trackId, other.trackId)
-				&& Objects.equals(valence, other.valence) && Objects.equals(year, other.year);
+				&& Objects.equals(trackId, other.trackId) && Objects.equals(valence, other.valence)
+				&& Objects.equals(year, other.year);
 	}
 
 	@Override
 	public String toString() {
-		return "Track [trackId=" + trackId + ", title=" + title + ", artist=" + artist + ", topGenre=" + topGenre
-				+ ", year=" + year + ", energy=" + energy + ", danceability=" + danceability + ", valence=" + valence
-				+ ", acousticness=" + acousticness + ", popularty=" + popularty + "]";
+		return "Track [trackId=" + trackId + ", title=" + title + ", artist=" + artist + ", genre=" + genre
+				+ ", length=" + length + ", year=" + year + ", energy=" + energy + ", danceability=" + danceability
+				+ ", valence=" + valence + ", acousticness=" + acousticness + ", popularty=" + popularty + "]";
 	}
+	
+	
 	
 	
 	

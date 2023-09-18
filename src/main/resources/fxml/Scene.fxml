@@ -21,9 +21,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polito.tdp.PlaylistGen.FXMLController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polito.tdp.PlaylistGen.FXMLController">
    <children>
-      <TabPane prefHeight="800.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" prefHeight="900.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Surprise Me">
             <content>
@@ -50,7 +50,7 @@
                                                 <Pane prefHeight="200.0" prefWidth="200.0">
                                                    <children>
                                                       <TextField fx:id="choiceDurataMaxSurprise" layoutX="200.0" layoutY="55.0" prefHeight="26.0" prefWidth="84.0" />
-                                                      <RadioButton fx:id="nBraniSurprise" layoutX="30.0" layoutY="21.0" mnemonicParsing="false" onAction="#getVincolo" text="Numero brani">
+                                                      <RadioButton fx:id="nBraniSurprise" layoutX="30.0" layoutY="21.0" mnemonicParsing="false" text="Numero brani">
                                                          <font>
                                                             <Font name="Arial" size="13.0" />
                                                          </font>
@@ -58,7 +58,7 @@
                                                             <ToggleGroup fx:id="vincoloSurprise" />
                                                          </toggleGroup>
                                                       </RadioButton>
-                                                      <RadioButton fx:id="minBraniSurprise" layoutX="30.0" layoutY="60.0" mnemonicParsing="false" onAction="#getVincolo" text="Durata massima (min)" toggleGroup="$vincoloSurprise">
+                                                      <RadioButton fx:id="minBraniSurprise" layoutX="30.0" layoutY="60.0" mnemonicParsing="false" text="Durata massima (min)" toggleGroup="$vincoloSurprise">
                                                          <font>
                                                             <Font name="Arial" size="13.0" />
                                                          </font></RadioButton>
@@ -101,15 +101,20 @@
                                                          <font>
                                                             <Font name="Arial" size="14.0" />
                                                          </font></Label>
-                                                      <Slider fx:id="sliderPop" layoutX="105.0" layoutY="290.0" majorTickUnit="1.0" max="10.0" minorTickCount="0" prefHeight="15.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
-                                                      <Slider fx:id="sliderAcoustic" layoutX="105.0" layoutY="230.0" majorTickUnit="1.0" max="10.0" minorTickCount="0" prefHeight="15.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
-                                                      <Slider fx:id="sliderValence" layoutX="105.0" layoutY="170.0" majorTickUnit="1.0" max="10.0" minorTickCount="0" prefHeight="15.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
-                                                      <Slider fx:id="sliderDance" layoutX="105.0" layoutY="110.0" majorTickUnit="1.0" max="10.0" minorTickCount="0" prefHeight="15.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
-                                                      <Slider fx:id="sliderEnergy" layoutX="105.0" layoutY="50.0" majorTickUnit="1.0" max="10.0" minorTickCount="0" prefHeight="15.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                                                      <Slider fx:id="sliderPop" layoutX="105.0" layoutY="290.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="0" prefHeight="15.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
+                                                      <Slider fx:id="sliderAcoustic" layoutX="105.0" layoutY="230.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="0" prefHeight="15.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
+                                                      <Slider fx:id="sliderValence" layoutX="105.0" layoutY="170.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="0" prefHeight="15.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
+                                                      <Slider fx:id="sliderDance" layoutX="105.0" layoutY="110.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="0" prefHeight="15.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
+                                                      <Slider fx:id="sliderEnergy" layoutX="105.0" layoutY="50.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="0" prefHeight="15.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
                                                       <Button fx:id="resetSurprise" layoutX="182.0" layoutY="345.0" mnemonicParsing="false" onAction="#resetSuprise" prefHeight="26.0" prefWidth="65.0" text="Reset">
                                                          <font>
                                                             <Font name="Arial" size="14.0" />
                                                          </font></Button>
+                                                      <Label fx:id="errorLabelSurprise" alignment="CENTER" layoutX="68.0" prefHeight="50.0" prefWidth="305.0" textAlignment="CENTER" textFill="#c81e1e">
+                                                         <font>
+                                                            <Font name="Arial" size="12.0" />
+                                                         </font>
+                                                      </Label>
                                                    </children>
                                                 </Pane>
                                                 <Pane layoutX="25.0" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
@@ -127,10 +132,10 @@
                                     </AnchorPane>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                        <children>
-                                          <TableView fx:id="playlistTable" layoutX="-5.0" layoutY="-1.0" prefHeight="650.0" prefWidth="770.0">
+                                          <TableView fx:id="playlistTableSurprise" layoutY="-1.0" prefHeight="650.0" prefWidth="762.0">
                                             <columns>
-                                              <TableColumn prefWidth="227.19036865234375" text="Artista" />
-                                              <TableColumn prefWidth="419.80963134765625" text="Titolo" />
+                                              <TableColumn fx:id="columnArtistSurprise" editable="false" prefWidth="250.0" sortable="false" text="Artista" />
+                                              <TableColumn fx:id="columnTrackSurprise" editable="false" prefWidth="512.0" sortable="false" text="Titolo" />
                                             </columns>
                                           </TableView>
                                        </children></AnchorPane>
@@ -138,14 +143,17 @@
                               </SplitPane>
                            </children>
                         </VBox>
-                        <Label fx:id="labelIstruzioni" alignment="CENTER" layoutX="100.0" layoutY="662.0" prefHeight="100.0" prefWidth="1000.0" text="Label" textAlignment="CENTER" />
+                        <Label fx:id="labelIstruzioniSurprise" layoutX="100.0" layoutY="662.0" prefHeight="185.0" prefWidth="1000.0" text="Label">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font></Label>
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
           <Tab text="My Mix">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="1200.0">
                      <children>
                         <VBox prefHeight="650.0" prefWidth="1200.0">
                            <children>
@@ -167,7 +175,7 @@
                                                 <Pane prefHeight="200.0" prefWidth="200.0">
                                                    <children>
                                                       <TextField fx:id="choiceDurataMaxMix" layoutX="199.0" layoutY="55.0" prefHeight="26.0" prefWidth="84.0" />
-                                                      <RadioButton fx:id="nBraniSurprise1" layoutX="30.0" layoutY="21.0" mnemonicParsing="false" onAction="#getVincolo" text="Numero brani">
+                                                      <RadioButton fx:id="nBraniMix" layoutX="30.0" layoutY="21.0" mnemonicParsing="false" text="Numero brani">
                                                          <font>
                                                             <Font name="Arial" size="13.0" />
                                                          </font>
@@ -175,7 +183,7 @@
                                                             <ToggleGroup fx:id="vincoloMix" />
                                                          </toggleGroup>
                                                       </RadioButton>
-                                                      <RadioButton fx:id="minBraniSurprise1" layoutX="30.0" layoutY="60.0" mnemonicParsing="false" onAction="#getVincolo" text="Durata massima (min)" toggleGroup="$vincoloMix">
+                                                      <RadioButton fx:id="minBraniMix" layoutX="30.0" layoutY="60.0" mnemonicParsing="false" text="Durata massima (min)" toggleGroup="$vincoloMix">
                                                          <font>
                                                             <Font name="Arial" size="13.0" />
                                                          </font></RadioButton>
@@ -214,6 +222,11 @@
                                                       <ComboBox fx:id="cmbGenreMix" layoutX="160.0" layoutY="103.0" onAction="#doPopolaArtista" prefHeight="26.0" prefWidth="220.0" />
                                                       <ComboBox fx:id="cmbArtistMix" layoutX="160.0" layoutY="153.0" onAction="#doPopolaBrani" prefHeight="26.0" prefWidth="220.0" />
                                                       <ComboBox fx:id="cmbTrackMix" layoutX="160.0" layoutY="203.0" prefHeight="26.0" prefWidth="220.0" />
+                                                      <Label fx:id="errorLabelMix" alignment="CENTER" layoutX="68.0" layoutY="27.0" prefHeight="50.0" prefWidth="305.0" textAlignment="CENTER" textFill="#c81e1e">
+                                                         <font>
+                                                            <Font name="Arial" size="12.0" />
+                                                         </font>
+                                                      </Label>
                                                    </children>
                                                 </Pane>
                                                 <Pane layoutX="25.0" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
@@ -222,20 +235,23 @@
                                                          <font>
                                                             <Font name="Arial" size="16.0" />
                                                          </font></Button>
-                                                      <ProgressBar fx:id="progressBarSurprise1" layoutX="61.0" layoutY="55.0" prefHeight="20.0" prefWidth="300.0" progress="0.0" />
+                                                      <ProgressBar fx:id="progressBarMix" layoutX="61.0" layoutY="55.0" prefHeight="20.0" prefWidth="300.0" progress="0.0" />
                                                    </children>
                                                 </Pane>
                                              </children>
                                           </GridPane>
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="755.0">
                                        <children>
-                                          <TableView layoutX="-5.0" layoutY="-1.0" prefHeight="650.0" prefWidth="770.0">
+                                          <TableView id="playlistTableMix" fx:id="playlistTableMix" prefHeight="650.0" prefWidth="762.0">
                                              <columns>
-                                                <TableColumn prefWidth="227.19036865234375" text="Artista" />
-                                                <TableColumn prefWidth="419.80963134765625" text="Titolo" />
+                                                <TableColumn fx:id="columnArtistMix" editable="false" prefWidth="250.0" resizable="false" sortable="false" text="Artista" />
+                                                <TableColumn fx:id="columnTrackMix" editable="false" prefWidth="512.0" resizable="false" sortable="false" text="Titolo" />
                                              </columns>
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
                                           </TableView>
                                        </children>
                                     </AnchorPane>
@@ -243,7 +259,11 @@
                               </SplitPane>
                            </children>
                         </VBox>
-                        <Label alignment="CENTER" layoutX="100.0" layoutY="662.0" prefHeight="100.0" prefWidth="1000.0" text="Label" />
+                        <Label fx:id="labelIstruzioniMix" layoutX="100.0" layoutY="662.0" prefHeight="185.0" prefWidth="1000.0" text="Label">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
                      </children></AnchorPane>
             </content>
           </Tab>

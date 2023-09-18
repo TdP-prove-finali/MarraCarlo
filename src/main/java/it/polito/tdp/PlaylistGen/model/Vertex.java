@@ -3,11 +3,11 @@ package it.polito.tdp.PlaylistGen.model;
 import java.util.Objects;
 
 public class Vertex {
-	
+
 	private Track track;
-	private Integer score;
-	
-	public Vertex(Track track, Integer score) {
+	private Double score;
+
+	public Vertex(Track track, Double score) {
 		super();
 		this.track = track;
 		this.score = score;
@@ -21,11 +21,11 @@ public class Vertex {
 		this.track = track;
 	}
 
-	public Integer getScore() {
+	public Double getScore() {
 		return score;
 	}
 
-	public void setScore(Integer score) {
+	public void setScore(Double score) {
 		this.score = score;
 	}
 
@@ -50,7 +50,5 @@ public class Vertex {
 	public String toString() {
 		return "Vertex [track=" + track + ", score=" + score + "]";
 	}
-	
-	
 
 }
