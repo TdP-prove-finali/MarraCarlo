@@ -1,7 +1,9 @@
 package it.polito.tdp.PlaylistGen;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.PlaylistGen.model.Model;
@@ -17,15 +19,17 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 
 public class FXMLController {
 	
 	private Model model;
-	private Integer vincolo;
-	private Boolean isVincoloBrani;
+	private Integer vincolo = 0;
+	private Boolean isVincoloBrani = null;
 	
     @FXML
     private ResourceBundle resources;
@@ -35,6 +39,9 @@ public class FXMLController {
 
     @FXML
     private Button addTrack;
+    
+    @FXML
+    private Button buttonremoveLastTrack;
 
     @FXML
     private Button buttonStartMix;
@@ -97,7 +104,7 @@ public class FXMLController {
     private TableView<Track> playlistTableMix;
     
     @FXML
-    private TableView<Track> playlistTableSurpise;
+    private TableView<Track> playlistTableSurprise;
     
     @FXML
     private TableColumn<Track, String> columnArtistMix;
@@ -113,12 +120,6 @@ public class FXMLController {
     
     @FXML
     private TabPane tabPane;
-
-    @FXML
-    private ProgressBar progressBarSurprise;
-
-    @FXML
-    private ProgressBar progressBarMix;
 
     @FXML
     private Button resetChoiceMix;
@@ -143,12 +144,19 @@ public class FXMLController {
 
     @FXML
     private Slider sliderValence;
+    
+    @FXML
+    private TextArea textAreaProgressMix;
+
+    @FXML
+    private TextArea textAreaProgressSurprise;
 
     @FXML
     private ToggleGroup vincoloMix;
 
     @FXML
     private ToggleGroup vincoloSurprise;
+    
 
     @FXML
     void addTrackMix(ActionEvent event) {
@@ -157,22 +165,28 @@ public class FXMLController {
     	String artist = cmbArtistMix.getValue();
     	String title = cmbTrackMix.getValue();
     	
-    	if (genre!=null && artist!=null && title!=null) {
-    		
-    		Track track = model.getTrackbyInput(genre, artist, title);
-    		if (track!=null) {
-    			errorLabelMix.setText(null);
-    			playlistTableMix.getItems().add(track);
-    			model.addTrackToMapId(track);
-    			cmbGenreMix.setDisable(true);
-    			cmbGenreMix.setValue(genre);
-    			this.resetChoiceMix(event);
-    		} else {
-    			errorLabelMix.setText("Brano già inserito!\nRiprovare");
-    		}
+    	if (playlistTableMix.getItems().size()<5) {
+    		if (genre!=null && artist!=null && title!=null) {
+        		
+        		Track track = model.getTrackbyInput(genre, artist, title);
+        		if (track!=null) {
+        			errorLabelMix.setText(null);
+        			playlistTableMix.getItems().add(track);
+        			model.addTrackToMapId(track);
+        			cmbGenreMix.setDisable(true);
+        			cmbGenreMix.setValue(genre);
+        			this.resetChoiceMix(event);
+        		} else {
+        			errorLabelMix.setText("Brano già inserito!\nRiprovare");
+        		}
+        	} else {
+        		errorLabelMix.setText("Impossibile continuare!\nSelezionare un brano e riprovare");
+        	}
     	} else {
-    		errorLabelMix.setText("Impossibile continuare!\nSelezionare un brano e riprovare");
+    		errorLabelMix.setText("Raggiungo il limite massimo di brani inseribili");
     	}
+    	
+    	
     	
     }
 
@@ -180,9 +194,30 @@ public class FXMLController {
     void avviaRicercaMix(ActionEvent event) {
     	
     	this.findVincolo();
-    	if (this.vincolo!=null) {
+    	if (this.isVincoloBrani!=null && this.vincolo!=0) {
     		if (!this.playlistTableMix.getItems().isEmpty()) {
+    			//Blocco opzione "Aggiungi" e "Reset"
+    			addTrack.setDisable(true);
+    			resetChoiceMix.setDisable(true);
+    			buttonremoveLastTrack.setDisable(true);
+    			
+    			//Creo Grafo
     			model.creaGrafoMix(cmbGenreMix.getValue());
+
+    			//Avvio ricerca
+    			List<Track> playlist = new ArrayList<>();
+    			playlist = model.calcolaPlaylist(null, this.isVincoloBrani, this.vincolo);
+    			
+    			//Aggiungo output alla tabella
+    			this.playlistTableMix.getItems().clear();
+    			this.playlistTableMix.getItems().addAll(playlist);
+    			
+    			//Informazioni sulla playlist creata
+    			String durata = model.getDurataPlaylistSec(playlist);
+    			textAreaProgressMix.setText("Playlist Creata!\nNumero brani: "+playlist.size()+".\nDurata totale: "+durata);	
+    			
+    			
+    			
     		} else {
     			errorLabelMix.setText("Impossibile continuare!\nInserire almeno un brano per continuare");
     		}
@@ -194,15 +229,25 @@ public class FXMLController {
     void avviaRicercaSurprise(ActionEvent event) {
     	
     	this.findVincolo();
-    	if (this.vincolo!=null) {
+    	if (this.isVincoloBrani!=null && this.vincolo!=0) {
     		this.collectSliders();
     		String genre = cmbGenreSurprise.getValue();
-    		String artist = cmbGenreSurprise.getValue();
+    		String artist = cmbArtistSurprise.getValue();
     		if (genre!=null) {
-    			resetSurprise.setDisable(true);
-    			this.progressBarSurprise.setProgress(-1);
+    			//Creo Grafo
     			this.model.creaGrafoSurprise(genre, artist, model.getPreference());
-    			this.progressBarSurprise.setProgress(0);
+    			
+    			//Avvio ricerca
+    			List<Track> playlist = new ArrayList<>();
+    			playlist = model.calcolaPlaylist(artist, this.isVincoloBrani, this.vincolo);
+    			
+    			//Aggiungo output alla tabella
+    			this.playlistTableSurprise.getItems().clear();
+    			this.playlistTableSurprise.getItems().addAll(playlist);
+    			
+    			//Informazioni sulla playlist creata
+    			String durata = model.getDurataPlaylistSec(playlist);
+    			textAreaProgressSurprise.setText("Playlist Creata!\nNumero brani: "+playlist.size()+".\nDurata totale: "+durata);
     			
     		} else {
     			errorLabelSurprise.setText("Selezionare un genere e riprovare");
@@ -226,6 +271,7 @@ public class FXMLController {
 
 	@FXML
     void doPopolaArtista(ActionEvent event) {
+		
     	this.cmbArtistSurprise.getItems().clear();
     	this.cmbArtistMix.getItems().clear();
     	
@@ -247,6 +293,7 @@ public class FXMLController {
 
     @FXML
     void doPopolaBrani(ActionEvent event) {
+    	
     	this.cmbTrackMix.getItems().clear();
     	
     	String artistMix = cmbArtistMix.getValue();
@@ -256,6 +303,17 @@ public class FXMLController {
     		cmbTrackMix.getItems().addAll(tracks);
     	}
     	
+    }
+    
+    @FXML
+    void removeLastTrack(ActionEvent event) {
+    	
+    	if (playlistTableMix.getItems().size()>=1) {
+    		Track lastTrack = playlistTableMix.getItems().get(playlistTableMix.getItems().size()-1);
+    		playlistTableMix.getItems().remove(lastTrack);
+    		model.removeLastTrack(lastTrack);
+    	}
+
     }
 
     @FXML
@@ -278,9 +336,13 @@ public class FXMLController {
 	    		String input = choiceDurataMaxSurprise.getText();
 	    		try {
 					Integer vincolo = Integer.parseInt(input);
-					errorLabelSurprise.setText(null);
-					this.setVincolo(vincolo);
-					this.setIsVincoloBrani(false);
+					if (vincolo>300) {
+						errorLabelSurprise.setText("Inserire valore inferiore a 300 minuti e riprovare");
+					} else {
+						errorLabelSurprise.setText(null);
+						this.setVincolo(vincolo);
+						this.setIsVincoloBrani(false);
+					}
 				} catch (Exception e) {
 					errorLabelSurprise.setText("Inserire valore valido e riprovare");
 				}
@@ -301,13 +363,17 @@ public class FXMLController {
 	    		} else {
 	    			errorLabelMix.setText("Inserire numero di brani massimo richiesto e riprovare");
 	    		}
-	    	} else if (minBraniSurprise.isSelected()) {
+	    	} else if (minBraniMix.isSelected()) {
 	    		String input = choiceDurataMaxMix.getText();
 	    		try {
 					Integer vincolo = Integer.parseInt(input);
-					errorLabelMix.setText(null);
-					this.setVincolo(vincolo);
-					this.setIsVincoloBrani(false);
+					if (vincolo>300) {
+						errorLabelMix.setText("Inserire valore inferiore a 300 minuti e riprovare");
+					} else {
+						errorLabelMix.setText(null);
+						this.setVincolo(vincolo);
+						this.setIsVincoloBrani(false);
+					}
 				} catch (Exception e) {
 					errorLabelMix.setText("Inserire valore valido e riprovare");
 				}
@@ -332,15 +398,17 @@ public class FXMLController {
     	cmbTrackMix.getItems().clear();
     	
     	
-    	//Reset error label
+    	//Reset error label e text area
     	errorLabelMix.setText(null);
-    	
     }
 
     @FXML
     void resetPlaylistMix(ActionEvent event) {
     	
     	playlistTableMix.getItems().clear();
+    	//Reset textArea e Label
+    	textAreaProgressMix.setText(null);
+    	errorLabelMix.setText(null);
     	
     	//Resetto mappa degli input nel model
     	model.resetTableMix();
@@ -349,6 +417,11 @@ public class FXMLController {
     	cmbGenreMix.setDisable(false);
     	cmbGenreMix.setPromptText(null);
     	cmbGenreMix.setValue(null);
+    	
+    	//Attivazione bottoni "Aggiungi" e "Reset"
+    	addTrack.setDisable(false);
+		resetChoiceMix.setDisable(false);
+		buttonremoveLastTrack.setDisable(false);
     	
     	//Reset scelta vincolo
     	cmbNBraniMix.setValue(null);
@@ -364,24 +437,31 @@ public class FXMLController {
     	cmbGenreSurprise.setValue(null);
     	cmbArtistSurprise.getItems().clear();
     	
-    	//Reset Vincoli e Error Label
+    	//Reset Vincoli, Error Label e Text Area
+    	this.isVincoloBrani = null;
+    	this.vincolo = 0;
+    	
     	cmbNBraniSurprise.setValue(null);
     	choiceDurataMaxSurprise.setText(null);
     	vincoloSurprise.selectToggle(null);
     	errorLabelSurprise.setText(null);
+    	textAreaProgressSurprise.setText(null);
     	
-    	//Reset Sliders
+    	//Reset Sliders e Table
+    	this.playlistTableSurprise.getItems().clear();
     	sliderEnergy.setValue(1);
     	sliderDance.setValue(1);
     	sliderValence.setValue(1);
     	sliderAcoustic.setValue(1);
     	sliderPop.setValue(1);
     	
+    	
     }
 
     @FXML
     void initialize() {
         assert addTrack != null : "fx:id=\"addTrack\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert buttonremoveLastTrack != null : "fx:id=\"buttonremoveLastTrack\" was not injected: check your FXML file 'Scene.fxml'.";
         assert buttonStartMix != null : "fx:id=\"buttonStartMix\" was not injected: check your FXML file 'Scene.fxml'.";
         assert buttonStartSurprise != null : "fx:id=\"buttonStartSurprise\" was not injected: check your FXML file 'Scene.fxml'.";
         assert choiceDurataMaxMix != null : "fx:id=\"choiceDurataMaxMix\" was not injected: check your FXML file 'Scene.fxml'.";
@@ -406,9 +486,7 @@ public class FXMLController {
         assert nBraniSurprise != null : "fx:id=\"nBraniSurprise\" was not injected: check your FXML file 'Scene.fxml'.";
         assert nBraniMix != null : "fx:id=\"nBraniSurprise1\" was not injected: check your FXML file 'Scene.fxml'.";
         assert playlistTableMix != null : "fx:id=\"playlistTableMix\" was not injected: check your FXML file 'Scene.fxml'.";
-        assert playlistTableSurpise != null : "fx:id=\"playlistTableSurprise\" was not injected: check your FXML file 'Scene.fxml'.";
-        assert progressBarSurprise != null : "fx:id=\"progressBarSurprise\" was not injected: check your FXML file 'Scene.fxml'.";
-        assert progressBarMix != null : "fx:id=\"progressBarMix\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert playlistTableSurprise != null : "fx:id=\"playlistTableSurprise\" was not injected: check your FXML file 'Scene.fxml'.";
         assert resetChoiceMix != null : "fx:id=\"resetChoiceMix\" was not injected: check your FXML file 'Scene.fxml'.";
         assert resetPlaylistMix != null : "fx:id=\"resetPlaylistMix\" was not injected: check your FXML file 'Scene.fxml'.";
         assert resetSurprise != null : "fx:id=\"resetSurprise\" was not injected: check your FXML file 'Scene.fxml'.";
@@ -418,6 +496,8 @@ public class FXMLController {
         assert sliderPop != null : "fx:id=\"sliderPop\" was not injected: check your FXML file 'Scene.fxml'.";
         assert sliderValence != null : "fx:id=\"sliderValence\" was not injected: check your FXML file 'Scene.fxml'.";
         assert tabPane != null : "fx:id=\"tabPane\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert textAreaProgressMix != null : "fx:id=\"textAreaProgressMix\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert textAreaProgressSurprise != null : "fx:id=\"textAreaProgressSurprise\" was not injected: check your FXML file 'Scene.fxml'.";
         assert vincoloMix != null : "fx:id=\"vincoloMix\" was not injected: check your FXML file 'Scene.fxml'.";
         assert vincoloSurprise != null : "fx:id=\"vincoloSurprise\" was not injected: check your FXML file 'Scene.fxml'.";
         
@@ -436,11 +516,12 @@ public class FXMLController {
         		+ "- Valence: Più alto è il valore, più positivo sarà l'umore della playlist.\n"
         		+ "- Acoustic: Più alto è il valore, più la playlist comprenderà musica che usa principalmente strumenti acustici, anziché elettrici o elettronici.\n"
         		+ "- Popularity: Più alto è il valore, più popolari saranno i brani della playlist.\n"
-        		+ "Seleziona infine il vincolo che preferisci tra un numero di canzoni o un minutaggio massimo e clicca \"Crea playlist\". ";
+        		+ "Seleziona infine il vincolo che preferisci tra un numero di canzoni o un minutaggio massimo e clicca \"Crea playlist\". \n"
+        		+ "ATTENZIONE: Ai fini di ottenere un risultato in tempi ragionevoli, si sconsiglia di richiedere una playlist di durata massima di più di 10 ore.";
         labelIstruzioniSurprise.setText(istruzioniSurprise);
         
         String istruzioniMix = "Benvenuto nella sezione MyMix! \n"
-        		+ "Aggiungi all’interno della tabella i brani del tuo genere preferito.\n"
+        		+ "Aggiungi all’interno della tabella fino a 5 brani del tuo genere preferito.\n"
         		+ "Seleziona infine il vincolo che preferisci tra un numero di canzoni o un minutaggio massimo e clicca “Crea Playlist”.\n";
         labelIstruzioniMix.setText(istruzioniMix);
     }
@@ -454,7 +535,7 @@ public class FXMLController {
     	cmbGenreMix.getItems().addAll(genres);
     	
     	//Inizializzazione ComboBox vincolo "Numero Brani"
-    	for (int i=5; i<=20; i++) {
+    	for (int i=10; i<=30; i++) {
     		cmbNBraniSurprise.getItems().add(i);
     		cmbNBraniMix.getItems().add(i);
     	}

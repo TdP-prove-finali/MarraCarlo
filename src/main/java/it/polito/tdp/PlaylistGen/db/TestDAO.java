@@ -9,8 +9,8 @@ public class TestDAO {
 	
 	public void run() {
 		TracksDAO dao = new TracksDAO();
-		//System.out.println(dao.listAllGenre());
-		System.out.println(dao.listAllArtistByGenre("Blues"));
+		System.out.println(dao.listAllGenre());
+		//System.out.println(dao.listAllArtistByGenre("Blues"));
 	}
 
 }

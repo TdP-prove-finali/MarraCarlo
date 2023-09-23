@@ -48,7 +48,7 @@ public class Vertex {
 
 	@Override
 	public String toString() {
-		return "Vertex [track=" + track + ", score=" + score + "]";
+		return "'"+track.getTitle()+"' - "+track.getArtist()+" (Score = "+score+")";
 	}
 
 }

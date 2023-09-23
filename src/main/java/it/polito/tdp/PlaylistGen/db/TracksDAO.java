@@ -16,7 +16,7 @@ public class TracksDAO {
 		String sql = "SELECT Tracks.`Top Genre`, COUNT(Tracks.`Top Genre`) "
 				+ "FROM Tracks "
 				+ "GROUP BY Tracks.`Top Genre` "
-				+ "HAVING COUNT(Tracks.`Top Genre`) >= 20 ";
+				+ "HAVING COUNT(Tracks.`Top Genre`) >= 30";
 		List<String> result = new ArrayList<String>();
 
 		try {
