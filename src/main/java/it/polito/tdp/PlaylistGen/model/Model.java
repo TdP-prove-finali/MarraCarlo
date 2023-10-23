@@ -22,18 +22,17 @@ public class Model {
 	// Grafo
 	private Graph<Vertex, DefaultWeightedEdge> grafo;
 	private List<Vertex> vertici;
-	private List<Vertex> bestPlaylist = new LinkedList<Vertex>();
+	private List<Vertex> bestPlaylist;
 	Double bestScore = Double.MAX_VALUE;
 
 	// Lista finale in output al controller
-	private List<Track> finalPlaylist = new ArrayList<>();;
+	private List<Track> finalPlaylist;
 
 	// Variabili sezione Surprise Me
 	private Preference preference;
 
 	// Variabili sezione MyMix
 	private Map<Integer, Track> tracksInput = new HashMap<Integer, Track>();
-	private Integer countInput = 0;
 
 	public Model() {
 		grafo = new SimpleWeightedGraph<Vertex, DefaultWeightedEdge>(DefaultWeightedEdge.class);
@@ -47,10 +46,10 @@ public class Model {
 
 		this.vertici.clear();
 		grafo = new SimpleWeightedGraph<Vertex, DefaultWeightedEdge>(DefaultWeightedEdge.class);
-		
+
 		// Creo Vertici
 		Graphs.addAllVertices(this.grafo, this.getVertici(genre, preference));
-		
+
 		// Creo Archi
 		this.creaArchi();
 	}
@@ -161,11 +160,11 @@ public class Model {
 			for (int i = 0; i < tracks.size(); i++) {
 				Double punteggio = this.calcolaPunteggio(tracks.get(i), preference);
 				Vertex vertice = new Vertex(tracks.get(i), punteggio);
-				vertici.add(vertice);
+				this.vertici.add(vertice);
 			}
 		}
 
-		return vertici;
+		return this.vertici;
 	}
 
 	private Double calcolaPunteggio(Track track, Preference preference) {
@@ -211,7 +210,6 @@ public class Model {
 		Track result = dao.trackByInput(genre, artist, title);
 		if (result != null && !tracksInput.containsKey(result.getTrackId())) {
 			this.tracksInput.put(result.getTrackId(), result);
-			countInput++;
 			return result;
 		}
 		return null;
@@ -220,7 +218,6 @@ public class Model {
 
 	public void resetTableMix() {
 
-		this.countInput = 0;
 		this.tracksInput.clear();
 
 	}
@@ -260,30 +257,24 @@ public class Model {
 		return null;
 	}
 
-	public List<Track> calcolaPlaylist(String artist, Boolean isVincoloBrani, Integer vincolo) {
+	public List<Track> calcolaPlaylist(String artist, Boolean isVincoloBrani, Integer vincolo, Boolean isMix) {
 
 		this.resetSearch();
 
 		List<Vertex> canzoniValide = new ArrayList<Vertex>();
 		ConnectivityInspector<Vertex, DefaultWeightedEdge> ci = new ConnectivityInspector<>(this.grafo);
 		List<Vertex> parziale = new ArrayList<>();
-		
-		//Controllo se i vincoli richiesti sono raggiungibili dal grafo
-		if (isVincoloBrani && this.getNVertici()<vincolo) {
-			System.out.println("Vincolo richiesto: "+vincolo);
-			System.out.println("Massimi brani possibili: "+ this.getNVertici());
+
+		// Controllo se i vincoli richiesti sono raggiungibili dal grafo
+		if (isVincoloBrani && this.getNVertici() < vincolo) {
 			vincolo = this.getNVertici();
-			System.out.println("Nuovo vincolo brani: "+vincolo);
 		} else if (!isVincoloBrani && this.getTotalDurataGraph() < vincolo) {
-			System.out.println("Vincolo richiesto: "+vincolo);
-			System.out.println("Massima durata possibile: "+ this.getTotalDurataGraph());
 			vincolo = this.getTotalDurataGraph();
-			System.out.println("Nuovo vincolo minuti: "+vincolo);
-			
 		}
 
-		// Sezione Mix, aggiungo vertici corrispondenti ai brani inseriti
-		if (!this.tracksInput.isEmpty()) {
+		// Sezione Mix, aggiungo vertici corrispondenti ai brani inseriti alla soluzione
+		// parziale
+		if (isMix) {
 			for (Track ti : this.tracksInput.values()) {
 				for (Vertex vi : this.getVertici(artist, preference)) {
 					if (ti.equals(vi.getTrack())) {
@@ -313,20 +304,20 @@ public class Model {
 	}
 
 	public Integer getTotalDurataGraph() {
-		
+
 		Integer totalDurata = 0;
-		
-		for (Vertex vi: this.grafo.vertexSet()) {
+
+		for (Vertex vi : this.grafo.vertexSet()) {
 			totalDurata += vi.getTrack().getLenght();
 		}
-		
-		return totalDurata/60;
+
+		return totalDurata / 60;
 	}
 
 	private void resetSearch() {
 
-		this.bestPlaylist.clear();
-		this.finalPlaylist.clear();
+		this.bestPlaylist = new LinkedList<Vertex>();
+		this.finalPlaylist = new ArrayList<Track>();
 		this.bestScore = Double.MAX_VALUE;
 
 	}
@@ -420,17 +411,7 @@ public class Model {
 				}
 			}
 			// Sezione MyMix
-		} else {
-			for (Vertex vi : this.grafo.vertexSet()) {
-				if (this.tracksInput.containsKey(vi.getTrack().getTrackId())) {
-					if (vi.getScore() > bestScore) {
-						bestScore = vi.getScore();
-						bestVertex = vi;
-					}
-				}
-			}
 		}
-
 		return bestVertex;
 	}
 
@@ -455,9 +436,9 @@ public class Model {
 	}
 
 	public void removeLastTrack(Track lastTrack) {
-		
+
 		this.tracksInput.remove(lastTrack.getTrackId());
-		
+
 	}
 
 }
