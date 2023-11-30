@@ -111,7 +111,7 @@ L’utente avrà il compito di specificare alcuni requisiti che il risultato dov
 \item Il grado di presenza richiesta delle cinque caratteristiche principali, Energia (E), Ballabilità (D), Positività (V), Acustica (A) e Popolarità (P) attraverso un punteggio da 1 a 10.
 \end{itemize}
 
-Gli input ricevuti saranno usati per creare un grafo pesato in cui i nodi saranno tutte le canzoni che soddisfano il genere scelto e l’anno di pubblicazione desiderato.
+Gli input ricevuti saranno usati per creare un grafo pesato in cui i nodi saranno tutte le canzoni che soddisfano il genere scelto.
 Ad ogni traccia verrà attribuito un punteggio di affinità con le cinque caratteristiche richieste.
 Dati i cinque gradi ($G_i$) ricevuti e ciascun brano $B_i$ che rientra nel genere scelto:
 $$ \text{Punteggio}(B_i) = G_E \cdot E(B_i) + G_D \cdot D(B_i) + G_V \cdot V(B_i) + G_A \cdot A(B_i) + G_P \cdot P(B_i) $$
@@ -177,7 +177,7 @@ La VBox di destra conterrà:
 
 \subsection{Contesto operativo}
 
-Mettendosi nei panni di un'azienda che opera nel campo del mercato  musicale, risulta evidente come la possibilità di consigliare playlist personalizzate ai propri utenti offre diversi vantaggi sia per gli utenti che per l'azienda stessa. Tra questi è possibile trovere:
+Mettendosi nei panni di un'azienda che opera nel campo del mercato  musicale, risulta evidente come la possibilità di consigliare playlist personalizzate ai propri utenti offre diversi vantaggi sia per gli utenti che per l'azienda stessa. Tra questi è possibile trovare:
 \begin{itemize}
 \item \textbf{Fidelizzazione degli utenti}: Offrire playlist personalizzate crea un'esperienza più coinvolgente per gli utenti, che si sentono compresi e apprezzati.
 \item \textbf{Aumento dell'engagement}: Le playlist personalizzate tengono gli utenti impegnati sulla piattaforma musicale più a lungo, aumentando il tempo complessivo trascorso e il coinvolgimento complessivo degli utenti.
@@ -249,7 +249,7 @@ I seguenti attributi, descrittivi delle caratteristiche principali di ciascun br
 \newpage
 \section{View (scene.fxml)}
 
-La View è responsabile della presentazione dei dati e dell'interazione con l'utente, assicurando che l'interfaccia utente sia intuitiva, risponda dinamicamente ai cambiamenti nel Model e fornisca feedback chiaro durante l'utilizzo dell'applicazione.
+La View è responsabile della presentazione dei dati e dell'interazione con l'utente, assicurando che l'interfaccia utente sia intuitiva, risponda dinamicamente ai cambiamenti nel Model e fornisca un feedback chiaro durante l'utilizzo dell'applicazione.
 
 Le interfacce grafiche sono state realizzate in \textit{JavaFX}, utilizzando l’applicativo \newline \textit{SceneBuilder}. 
 
@@ -302,7 +302,7 @@ I cinque slider sono seguiti da due Button, uno per il reset dei valori fino a q
 \newpage 
 \subsection{My Mix}
 
-La sezione "My Mix" è composta da una SplitPane la cui zona a sinistra permette all'utente l'inserimento dei brani preferiti su cui verrà effettuta lo studio dei gusti e la conseguente ricerca. Nella zona di destra, come nella sezione precedente, è presente una tabella in cui verrà visualizzata la playlist in output.
+La sezione "My Mix" è composta da una SplitPane la cui zona a sinistra permette all'utente l'inserimento dei brani preferiti su cui verrà effettuato lo studio dei gusti e la conseguente ricerca. Nella zona di destra, come nella sezione precedente, è presente una tabella in cui verrà visualizzata la playlist in output.
 
 L'inserimento all'interno della playlist dei brani preferiti avviene attraverso la selezione in fila del genere, artista e infine del brano desiderato attraverso tre ComboBox che si riempiono conseguentemente alle precendenti scelte effettutate.
 
@@ -347,7 +347,7 @@ La splitPane di sinistra è infine conclusa con un Button per l'avvio della rice
 
 \section{Strutture dati e algoritmi principali}
 
-Nella realizzazione dell'applicazione, sono stati adottati sia il modello architetturale MVC (Model-View-Controller) che il design pattern DAO (Data Access Object). \\Queste metodologie permettono di separare chiaramente le principali componenti di un software, ovvero la logica, l'accesso ai dati e l'interfaccia utente. Questi elementi sono stati sviluppati in moduli distinti, come evidenziato nella rappresentazione grafica adiacente. A seguire, verranno analizzati in dettaglio.
+Nella realizzazione dell'applicazione, sono stati adottati sia il modello architetturale MVC (Model-View-Controller) che il design pattern DAO (Data Access Object). \\Queste metodologie permettono di separare chiaramente le principali componenti di un software, ovvero la logica, l'accesso ai dati e l'interfaccia utente. A seguire, verranno analizzati in dettaglio.
 
 \subsection{Package it.polito.PlaylistGen}
 
