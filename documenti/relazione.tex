@@ -115,8 +115,8 @@ Gli input ricevuti saranno usati per creare un grafo pesato in cui i nodi sarann
 Ad ogni traccia verrà attribuito un punteggio di affinità con le cinque caratteristiche richieste.
 Dati i cinque gradi ($G_i$) ricevuti e ciascun brano $B_i$ che rientra nel genere scelto:
 $$ \text{Punteggio}(B_i) = G_E \cdot E(B_i) + G_D \cdot D(B_i) + G_V \cdot V(B_i) + G_A \cdot A(B_i) + G_P \cdot P(B_i) $$
-Attraverso questo punteggio, il peso di ciascun vertice sarà calcolato attraverso la differenza (in valore assoluto) di punteggio dei due nodi, di conseguenza un peso basso corrisponderà ad un alta affinità. \par
-Una volta ottenuto il grafo, si procederà con una ricerca ricorsiva (opportunamente ottimizzata) che troverà la playlist con il più basso valore totale di vertici percorsi. In caso di più possibili affinità con il brano successivo e la presenza di una brano dell’artista preferito, la scelta ricadrà su quest’ultimo in caso di pesi dei vertici simili. \par
+Attraverso questo punteggio associato a ciascun vertice, il peso di ciascun arco sarà calcolato attraverso la differenza (in valore assoluto) di punteggio dei due nodi considerati, di conseguenza un peso basso corrisponderà ad un alta affinità. \par
+Una volta ottenuto il grafo, si procederà con una ricerca ricorsiva (opportunamente ottimizzata) che troverà la playlist con il più basso valore totale di archi percorsi. In caso di più possibili affinità con il brano successivo e la presenza di una brano dell’artista preferito, la scelta ricadrà su quest’ultimo in caso di pesi degli archi simili. \par
 L’idea di limitare la ricerca ad un singolo genere potrà essere allargata a due o più in caso di buone prestazioni dell’algoritmo.
 La playlist trovata sarà poi inserita all’interno della tabella dell’applicazione software e il suo punteggio all’intento della casella di testo sottostante.
 
